@@ -62,6 +62,13 @@ api_query <- function(path, query=NULL, access_token=check_access_token(),
 				silent=TRUE
 			)			
 		}
+		# 尝试取出response中的status值
+		tryCatch({
+		    status <- r$status_code
+		}, error = function(e) {
+		    cat("提取结局", query$id, "中的", query$variant, "时, 发生错误:", "\n", e$message, "\n")
+		    break
+		})
 		if('try-error' %in% class(r))
 		{
 			if(grepl("Timeout", as.character(attributes(r)$condition)))
