@@ -70,7 +70,6 @@ api_query <- function(path, query=NULL, access_token=check_access_token(),
 			  r <- try(
 			    httr::POST(
 			      paste0(options()$ieugwasr_api, path),
-			      body = query, 
 			      headers,
 			      encode=encode,
 			      httr::timeout(timeout)
