@@ -68,8 +68,8 @@ api_query <- function(path, query=NULL, access_token=check_access_token(),
 		}, error = function(e) {
 		    cat("提取结局", query$id, "中的", query$variant, "时, 发生错误:", "\n", e$message, "\n")
 			  r <- try(
-			    httr::POST(
-			      paste0(options()$ieugwasr_api, path),
+			    httr::GET(
+			      paste0(options()$ieugwasr_api),
 			      headers,
 			      encode=encode,
 			      httr::timeout(timeout)
