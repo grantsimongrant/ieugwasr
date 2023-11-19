@@ -66,24 +66,35 @@ api_query <- function(path, query=NULL, access_token=check_access_token(),
 		tryCatch({
 		    status <- r$status_code
 		}, error = function(e) {
-		    cat("提取结局", query$id, "中的", query$variant, "时, 发生错误:", "\n", e$message, "\n")
-			  r <- try(
-			    httr::GET(
-			      paste0(options()$ieugwasr_api),
-			      headers,
-			      encode=encode,
-			      httr::timeout(timeout)
-			    ),
-			    silent=TRUE
-			  )
-		    return(r)
+			cat("提取结局", query$id, "中的", query$variant, "时, 发生错误:", "\n", e$message, "\n")
+			r <- try(
+			httr::GET(
+			paste0(options()$ieugwasr_api),
+			headers,
+			encode=encode,
+			httr::timeout(timeout)
+			),
+			silent=TRUE
+			)
+			return(r)
 		})
 		if('try-error' %in% class(r))
 		{
-			if(grepl("Timeout", as.character(attributes(r)$condition)))
-			{
-				stop("The query to MR-Base exceeded ", timeout, " seconds and timed out. Please simplify the query")
-			}
+		    # if(grepl("Timeout", as.character(attributes(r)$condition)))
+		    # {
+		    #     stop("The query to MR-Base exceeded ", timeout, " seconds and timed out. Please simplify the query")
+		    # }
+		    cat("发生了超时错误，需要简化查询")
+		    r <- try(
+		        httr::GET(
+		            paste0(options()$ieugwasr_api),
+		            headers,
+		            encode=encode,
+		            httr::timeout(timeout)
+		        ),
+		        silent=TRUE
+		    )
+		    return(r)
 		}
 		if(! 'try-error' %in% class(r))
 		{
