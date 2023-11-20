@@ -147,7 +147,11 @@ get_query_content <- function(response)
 {
 	if(httr::status_code(response) >= 200 & httr::status_code(response) < 300)
 	{
-		o <- jsonlite::fromJSON(httr::content(response, "text", encoding='UTF-8'))
+		tryCatch({
+			o <- jsonlite::fromJSON(httr::content(response, "text", encoding='UTF-8'))
+		}, error = function(e) {
+			o <- data.frame()
+		})
 		if('eaf' %in% names(o)) 
 		{
 			o[["eaf"]] <- as.numeric(o[["eaf"]])
